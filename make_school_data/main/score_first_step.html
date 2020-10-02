@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>index</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>score_first_step</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14259,23 +14259,1884 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Dataset-construction">Dataset construction<a class="anchor-link" href="#Dataset-construction">&#182;</a></h3><ol>
-<li><a href="./make_school_data/main/score_first_step.html">First step</a></li>
-<li><a href="./make_school_data/main/score_second_step.html">Second step</a></li>
-<li><a href="./make_school_data/main/score_third_step.html">Third step</a></li>
-</ol>
-<p><a href="./make_school_data/main/column_description.html">Column description</a></p>
-<h3 id="Classifications">Classifications<a class="anchor-link" href="#Classifications">&#182;</a></h3><ol>
-<li><a href="./schools_analytics/Denomination_classificator.html">Denomination classificator</a></li>
-<li><a href="./schools_analytics/CET_score_classificator.html">CET score level classificator</a></li>
-</ol>
+<h1 id="Dutch-schools-dataset-construction">Dutch schools dataset construction<a class="anchor-link" href="#Dutch-schools-dataset-construction">&#182;</a></h1><p>Since I need to choose the school, most fitted for my child, I really interested in having more knowledge about primary education system in The Netherlands and to know more about school differences. I found that Dutch Ministry of education, culture and science opened some datf about primary schools. It's very scattered information placed in different files in not very useful for analysis form, so before go to analysis I want to join info I need together, clean data, deal with missing values and maybe tramsform data to the view which would be easier to read and analyse.</p>
+<p>All the data for this part of dataset construction I got here: <a href="https://duo.nl/open_onderwijsdata/databestanden/po/leerlingen-po/bo-sbo/bo-sbo-eindscores.jsp">https://duo.nl/open_onderwijsdata/databestanden/po/leerlingen-po/bo-sbo/bo-sbo-eindscores.jsp</a></p>
+<h2 id="1.-Exams-scores">1. Exams scores<a class="anchor-link" href="#1.-Exams-scores">&#182;</a></h2><p>First I will join a few .cvs files about exam score from differetn years together:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[181]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="n">data_score_2014</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Test_score_2014_2015.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+<span class="n">data_score_2015</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Test_score_2015_2016.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+<span class="n">data_score_2016</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Test_score_2016_2017.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+<span class="n">data_score_2017</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Test_score_2017_2018.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+<span class="n">data_score_2018</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Test_score_2018_2019.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2014</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">data_score_2018</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Index([&#39;PEILDATUM_LEERLINGEN&#39;, &#39;PRIKDATUM_SCORES&#39;, &#39;BRIN_NUMMER&#39;,
+       &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;Leerjaar_8&#39;,
+       &#39;ONTHEFFING_REDEN_ND&#39;, &#39;CET_AANTAL&#39;, &#39;cet_gem&#39;, &#39;IEP_AANTAL&#39;, &#39;iep_gem&#39;,
+       &#39;ROUTE8_AANTAL&#39;, &#39;route8_gem&#39;, &#39;DREMPEL_AANTAL&#39;, &#39;drempel_gem&#39;],
+      dtype=&#39;object&#39;)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[181]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PEILDATUM_LEERLINGEN</th>
+      <th>PRIKDATUM_SCORES</th>
+      <th>BRIN_NUMMER</th>
+      <th>VESTIGINGSNUMMER</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>...</th>
+      <th>CET_AANTAL</th>
+      <th>CET_GEM</th>
+      <th>IEP_AANTAL</th>
+      <th>IEP_GEM</th>
+      <th>ROUTE8_AANTAL</th>
+      <th>ROUTE8_GEM</th>
+      <th>DIA_AANTAL</th>
+      <th>DIA_GEM</th>
+      <th>AMN_AANTAL</th>
+      <th>AMN_GEM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20190417</td>
+      <td>20190725</td>
+      <td>00AP</td>
+      <td>0</td>
+      <td>Wereldwijs</td>
+      <td>2716PH</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>11</td>
+      <td>538,636363636364</td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20190417</td>
+      <td>20190725</td>
+      <td>00AR</td>
+      <td>0</td>
+      <td>BS "De Maasparel"</td>
+      <td>6107AW</td>
+      <td>STEVENSWEERT</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>...</td>
+      <td>17</td>
+      <td>537,588235294118</td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20190417</td>
+      <td>20190725</td>
+      <td>00AV</td>
+      <td>0</td>
+      <td>De Morgenster</td>
+      <td>3201CN</td>
+      <td>SPIJKENISSE</td>
+      <td>1930</td>
+      <td>Nissewaard</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>12</td>
+      <td>532,5</td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20190417</td>
+      <td>20190725</td>
+      <td>00AZ</td>
+      <td>0</td>
+      <td>De Stapsteen</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0</td>
+      <td></td>
+      <td>14</td>
+      <td>84,3571428571429</td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20190417</td>
+      <td>20190725</td>
+      <td>00BA</td>
+      <td>0</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>...</td>
+      <td>0</td>
+      <td></td>
+      <td>16</td>
+      <td>83,625</td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+      <td>0</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 25 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>I noticed that the 'data_score_2014' dataframe have some columns named using small letters, but in other dataframes only capital letters are using, let's change it:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[182]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score_2014</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cet_gem&#39;</span><span class="p">:</span> <span class="s1">&#39;CET_GEM&#39;</span><span class="p">,</span> <span class="s1">&#39;iep_gem&#39;</span><span class="p">:</span> <span class="s1">&#39;IEP_GEM&#39;</span><span class="p">,</span> <span class="s1">&#39;route8_gem&#39;</span><span class="p">:</span><span class="s1">&#39;ROUTE8_GEM&#39;</span><span class="p">,</span> <span class="s1">&#39;Leerjaar_8&#39;</span><span class="p">:</span><span class="s1">&#39;LEERJAAR_8&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Now let's merge everything in one dataframe:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[183]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_score_2014</span><span class="p">,</span> <span class="n">data_score_2015</span><span class="p">,</span> <span class="n">data_score_2016</span><span class="p">,</span> <span class="n">data_score_2017</span><span class="p">,</span> <span class="n">data_score_2018</span><span class="p">]</span>
+<span class="n">data_score</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data_frames</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2014</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2015</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2016</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2017</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score_2018</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(6920, 23)
+(6851, 21)
+(6751, 27)
+(6658, 25)
+(6579, 25)
+(33759, 29)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[184]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[184]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PEILDATUM_LEERLINGEN</th>
+      <th>PRIKDATUM_SCORES</th>
+      <th>BRIN_NUMMER</th>
+      <th>VESTIGINGSNUMMER</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>...</th>
+      <th>ROUTE8_AANTAL</th>
+      <th>ROUTE8_GEM</th>
+      <th>DREMPEL_AANTAL</th>
+      <th>drempel_gem</th>
+      <th>DIA_AANTAL</th>
+      <th>DIA_GEM</th>
+      <th>CESAN_AANTAL</th>
+      <th>CESAN_GEM</th>
+      <th>AMN_AANTAL</th>
+      <th>AMN_GEM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20141001</td>
+      <td>20150918</td>
+      <td>00AP</td>
+      <td>0</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20141001</td>
+      <td>20150918</td>
+      <td>00AR</td>
+      <td>0</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>...</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20141001</td>
+      <td>20150918</td>
+      <td>00AV</td>
+      <td>0</td>
+      <td>De Morgenster</td>
+      <td>3201CN</td>
+      <td>SPIJKENISSE</td>
+      <td>612</td>
+      <td>Spijkenisse</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20141001</td>
+      <td>20150918</td>
+      <td>00AZ</td>
+      <td>0</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20141001</td>
+      <td>20150918</td>
+      <td>00BA</td>
+      <td>0</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>...</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td>0,00</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 29 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Now I want to see which type of columns we have in dataset:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[185]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>PEILDATUM_LEERLINGEN          int64
+PRIKDATUM_SCORES              int64
+BRIN_NUMMER                  object
+VESTIGINGSNUMMER              int64
+INSTELLINGSNAAM_VESTIGING    object
+POSTCODE_VESTIGING           object
+PLAATSNAAM                   object
+GEMEENTENUMMER                int64
+GEMEENTENAAM                 object
+PROVINCIE                    object
+SOORT_PO                     object
+DENOMINATIE_VESTIGING        object
+BEVOEGD_GEZAG_NUMMER          int64
+LEERJAAR_8                    int64
+ONTHEFFING_REDEN_ND          object
+CET_AANTAL                   object
+CET_GEM                      object
+IEP_AANTAL                   object
+IEP_GEM                      object
+ROUTE8_AANTAL                object
+ROUTE8_GEM                   object
+DREMPEL_AANTAL               object
+drempel_gem                  object
+DIA_AANTAL                   object
+DIA_GEM                      object
+CESAN_AANTAL                 object
+CESAN_GEM                    object
+AMN_AANTAL                   object
+AMN_GEM                      object
+dtype: object
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>There are few columns has type 'object', but they should has 'int' or 'float' type, so I think there are some values which cannot be converted to numeric ones. Let's check it. I think that such values can be considered as missing values, so let's change it to 0:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[186]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fill_missing_zero_value</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+    <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">convert_to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">get_numeric_column</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+    <span class="n">fill_missing_zero_value</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+    <span class="n">convert_to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;ONTHEFFING_REDEN_ND&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ONTHEFFING_REDEN_ND&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;CET_GEM&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;IEP_GEM&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;ROUTE8_GEM&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;drempel_gem&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;DIA_GEM&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;CESAN_GEM&#39;</span><span class="p">)</span>
+
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">)</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">get_numeric_column</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="s1">&#39;AMN_GEM&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>PEILDATUM_LEERLINGEN           int64
+PRIKDATUM_SCORES               int64
+BRIN_NUMMER                   object
+VESTIGINGSNUMMER               int64
+INSTELLINGSNAAM_VESTIGING     object
+POSTCODE_VESTIGING            object
+PLAATSNAAM                    object
+GEMEENTENUMMER                 int64
+GEMEENTENAAM                  object
+PROVINCIE                     object
+SOORT_PO                      object
+DENOMINATIE_VESTIGING         object
+BEVOEGD_GEZAG_NUMMER           int64
+LEERJAAR_8                     int64
+ONTHEFFING_REDEN_ND          float64
+CET_AANTAL                     int64
+CET_GEM                      float64
+IEP_AANTAL                     int64
+IEP_GEM                      float64
+ROUTE8_AANTAL                  int64
+ROUTE8_GEM                   float64
+DREMPEL_AANTAL                 int64
+drempel_gem                  float64
+DIA_AANTAL                     int64
+DIA_GEM                      float64
+CESAN_AANTAL                   int64
+CESAN_GEM                    float64
+AMN_AANTAL                     int64
+AMN_GEM                      float64
+dtype: object
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Let's check do we have null or NaN values:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[187]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>PEILDATUM_LEERLINGEN         0
+PRIKDATUM_SCORES             0
+BRIN_NUMMER                  0
+VESTIGINGSNUMMER             0
+INSTELLINGSNAAM_VESTIGING    0
+POSTCODE_VESTIGING           0
+PLAATSNAAM                   0
+GEMEENTENUMMER               0
+GEMEENTENAAM                 0
+PROVINCIE                    0
+SOORT_PO                     0
+DENOMINATIE_VESTIGING        0
+BEVOEGD_GEZAG_NUMMER         0
+LEERJAAR_8                   0
+ONTHEFFING_REDEN_ND          0
+CET_AANTAL                   0
+CET_GEM                      0
+IEP_AANTAL                   0
+IEP_GEM                      0
+ROUTE8_AANTAL                0
+ROUTE8_GEM                   0
+DREMPEL_AANTAL               0
+drempel_gem                  0
+DIA_AANTAL                   0
+DIA_GEM                      0
+CESAN_AANTAL                 0
+CESAN_GEM                    0
+AMN_AANTAL                   0
+AMN_GEM                      0
+dtype: int64
+PEILDATUM_LEERLINGEN         0
+PRIKDATUM_SCORES             0
+BRIN_NUMMER                  0
+VESTIGINGSNUMMER             0
+INSTELLINGSNAAM_VESTIGING    0
+POSTCODE_VESTIGING           0
+PLAATSNAAM                   0
+GEMEENTENUMMER               0
+GEMEENTENAAM                 0
+PROVINCIE                    0
+SOORT_PO                     0
+DENOMINATIE_VESTIGING        0
+BEVOEGD_GEZAG_NUMMER         0
+LEERJAAR_8                   0
+ONTHEFFING_REDEN_ND          0
+CET_AANTAL                   0
+CET_GEM                      0
+IEP_AANTAL                   0
+IEP_GEM                      0
+ROUTE8_AANTAL                0
+ROUTE8_GEM                   0
+DREMPEL_AANTAL               0
+drempel_gem                  0
+DIA_AANTAL                   0
+DIA_GEM                      0
+CESAN_AANTAL                 0
+CESAN_GEM                    0
+AMN_AANTAL                   0
+AMN_GEM                      0
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>It looks like we don't have NaN or null values.</p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Now I would like to change columns with exam's date info to columns with just a year of the exam:</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[188]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;PRIKDATUM_SCORES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;PRIKDATUM_SCORES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span>
+    <span class="mi">20150918</span> <span class="p">:</span> <span class="mi">2015</span><span class="p">,</span>
+    <span class="mi">20160722</span> <span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+    <span class="mi">20170722</span> <span class="p">:</span> <span class="mi">2017</span><span class="p">,</span>
+    <span class="mi">20180725</span> <span class="p">:</span> <span class="mi">2018</span><span class="p">,</span>
+    <span class="mi">20190725</span> <span class="p">:</span> <span class="mi">2019</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;PRIKDATUM_SCORES&#39;</span><span class="p">:</span> <span class="s1">&#39;DATUM&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[189]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DATUM&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>2015    6920
+2016    6851
+2017    6751
+2018    6658
+2019    6579
+Name: DATUM, dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>I know that most common final test in the primary schools in The Netherlands is CET and suppose it shoul be most common schools choise in terms of types of final exam. I want to explore what information we have about exams students are taking, but first let's explore do we have the rows without any info about exams:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[190]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">schools_without_exams</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> 
+                               <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> 
+                                <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> 
+                                <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="n">schools_at_least_1_exam</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> 
+                               <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> 
+                                <span class="o">|</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> 
+                                <span class="o">|</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schools_at_least_1_exam</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schools_without_exams</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(33759, 29)
+(32253, 29)
+(1506, 29)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>And remove this rows (without any exams):</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[191]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">schools_without_exams</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(32253, 29)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Next let's take a look do we have wrong exams data (for example, we have amount of pupils who took the exam, but score is 0 or vice versa). And if we have it, we need to remove it.</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[192]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_wrong_data</span><span class="p">(</span><span class="n">subset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">subset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">subset</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">wrong_cet</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CET_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_cet</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_cet</span><span class="p">)</span>
+
+<span class="n">wrong_drempel</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;drempel_gem&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;drempel_gem&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_drempel</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_drempel</span><span class="p">)</span>
+
+<span class="n">wrong_AMN</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;AMN_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_AMN</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_AMN</span><span class="p">)</span>
+
+<span class="n">wrong_CESAN</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;CESAN_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_CESAN</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_CESAN</span><span class="p">)</span>
+
+<span class="n">wrong_DIA</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;DIA_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_DIA</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_DIA</span><span class="p">)</span>
+
+<span class="n">wrong_ROUTE8</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;ROUTE8_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_ROUTE8</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_ROUTE8</span><span class="p">)</span>
+
+<span class="n">wrong_IEP</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_GEM&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
+                      <span class="p">((</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;IEP_GEM&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrong_IEP</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">remove_wrong_data</span><span class="p">(</span><span class="n">wrong_IEP</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(537, 29)
+(68, 29)
+(10, 29)
+(0, 29)
+(12, 29)
+(115, 29)
+(208, 29)
+(31303, 29)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Now I want to see how many schools choose different type of exams and is there a lot of schools which choose more then two kind of test:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[193]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">schools_more_then_2_exam</span> <span class="o">=</span> <span class="n">data_score</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">count_exams</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">DREMPEL_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">count</span>
+    <span class="k">return</span> <span class="n">count</span>
+
+    
+<span class="n">schools_more_then_2_exam</span><span class="p">[</span><span class="s1">&#39;EXAMEN_AANTAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schools_more_then_2_exam</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">count_exams</span><span class="p">(</span><span class="n">row</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> 
+
+<span class="n">schools_more_then_2_exam</span> <span class="o">=</span> <span class="n">schools_more_then_2_exam</span><span class="p">[</span><span class="n">schools_more_then_2_exam</span><span class="p">[</span><span class="s1">&#39;EXAMEN_AANTAL&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schools_more_then_2_exam</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">schools_more_then_2_exam</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(3, 30)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[193]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PEILDATUM_LEERLINGEN</th>
+      <th>DATUM</th>
+      <th>BRIN_NUMMER</th>
+      <th>VESTIGINGSNUMMER</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>...</th>
+      <th>ROUTE8_GEM</th>
+      <th>DREMPEL_AANTAL</th>
+      <th>drempel_gem</th>
+      <th>DIA_AANTAL</th>
+      <th>DIA_GEM</th>
+      <th>CESAN_AANTAL</th>
+      <th>CESAN_GEM</th>
+      <th>AMN_AANTAL</th>
+      <th>AMN_GEM</th>
+      <th>EXAMEN_AANTAL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>18551</th>
+      <td>20170415</td>
+      <td>2017</td>
+      <td>15YU</td>
+      <td>0</td>
+      <td>OBS Holy</td>
+      <td>3137WD</td>
+      <td>VLAARDINGEN</td>
+      <td>622</td>
+      <td>Vlaardingen</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>184.600000</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>25227</th>
+      <td>20180417</td>
+      <td>2018</td>
+      <td>15YU</td>
+      <td>0</td>
+      <td>OBS Holy</td>
+      <td>3137WD</td>
+      <td>VLAARDINGEN</td>
+      <td>622</td>
+      <td>Vlaardingen</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>208.166667</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>31810</th>
+      <td>20190417</td>
+      <td>2019</td>
+      <td>15YU</td>
+      <td>0</td>
+      <td>OBS Holy</td>
+      <td>3137WD</td>
+      <td>VLAARDINGEN</td>
+      <td>622</td>
+      <td>Vlaardingen</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>191.200000</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+<p>3 rows × 30 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>There are few rows with more then 2 type of test chosen. Let's just remove it, then it will be possible to make a column of chosen exams in each school and remove all unnecessary columns:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[194]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#remove rows with more then 2 choosen type of tests</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">schools_more_then_2_exam</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(31303, 29)
+(31300, 29)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[195]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># make columns for the test with biggest amount of pupils who took it</span>
+<span class="k">def</span> <span class="nf">most_common_exam</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">exam_type</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span><span class="s1">&#39;CET&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_GEM</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">DREMPEL_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;DREMPEL&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DREMPEL_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">drempel_gem</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;AMN&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_GEM</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;CESAN&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_GEM</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;DIA&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_GEM</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;ROUTE8&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_GEM</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_AANTAL</span> <span class="o">&gt;</span> <span class="n">amount</span><span class="p">:</span>
+        <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;IEP&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_GEM</span>
+    <span class="k">return</span> <span class="n">exam_type</span><span class="p">,</span><span class="n">amount</span><span class="p">,</span><span class="n">score</span>
+
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_1&#39;</span><span class="p">],</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_1_AANTAL&#39;</span><span class="p">],</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_1_GEM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data_score</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">most_common_exam</span><span class="p">(</span><span class="n">row</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[195]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PEILDATUM_LEERLINGEN</th>
+      <th>DATUM</th>
+      <th>BRIN_NUMMER</th>
+      <th>VESTIGINGSNUMMER</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>...</th>
+      <th>drempel_gem</th>
+      <th>DIA_AANTAL</th>
+      <th>DIA_GEM</th>
+      <th>CESAN_AANTAL</th>
+      <th>CESAN_GEM</th>
+      <th>AMN_AANTAL</th>
+      <th>AMN_GEM</th>
+      <th>EXAMEN_1</th>
+      <th>EXAMEN_1_AANTAL</th>
+      <th>EXAMEN_1_GEM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20141001</td>
+      <td>2015</td>
+      <td>00AP</td>
+      <td>0</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>CET</td>
+      <td>11</td>
+      <td>534.3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20141001</td>
+      <td>2015</td>
+      <td>00AR</td>
+      <td>0</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>CET</td>
+      <td>18</td>
+      <td>539.8</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20141001</td>
+      <td>2015</td>
+      <td>00AZ</td>
+      <td>0</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>CET</td>
+      <td>22</td>
+      <td>532.9</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20141001</td>
+      <td>2015</td>
+      <td>00BA</td>
+      <td>0</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>CET</td>
+      <td>11</td>
+      <td>536.2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>20141001</td>
+      <td>2015</td>
+      <td>00BB</td>
+      <td>0</td>
+      <td>Obs Letterwies</td>
+      <td>9944AR</td>
+      <td>NIEUWOLDA</td>
+      <td>1895</td>
+      <td>Oldambt</td>
+      <td>Groningen</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>CET</td>
+      <td>16</td>
+      <td>531.3</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 32 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[196]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># make columns for the second chosen test</span>
+<span class="k">def</span> <span class="nf">get_second_exam</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">CET_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;CET&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;CET&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CET_GEM</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">DREMPEL_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;DREMPEL&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;DREMPEL&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DREMPEL_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">drempel_gem</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">AMN_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;AMN&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;AMN&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">AMN_GEM</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">CESAN_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;CESAN&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;CESAN&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">CESAN_GEM</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">DIA_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;DIA&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;DIA&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">DIA_GEM</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;ROUTE8&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ROUTE8&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">ROUTE8_GEM</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">IEP_AANTAL</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">EXAMEN_1</span> <span class="o">!=</span> <span class="s1">&#39;IEP&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;IEP&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_AANTAL</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">IEP_GEM</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_2&#39;</span><span class="p">],</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_2_AANTAL&#39;</span><span class="p">],</span> <span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_2_GEM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data_score</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">get_second_exam</span><span class="p">(</span><span class="n">row</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[196]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>           31151
+CET           55
+IEP           55
+ROUTE8        18
+DREMPEL       11
+DIA            6
+AMN            4
+Name: EXAMEN_2, dtype: int64</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We can see that most of the schools in dataset (31151) has one chosen type of exam, so we can remove new columns 'EXAMEN<em>2</em>...' because it has relatively small information.</p>
+<p>Next we also need to make a new field which values would be unique for each school (and which we would use later to merge different dataframes). I think if we pool 'VESTIGINGSNUMMER', 'BRIN_NUMMER' and 'DATUM' columns, we would have unique value for each row:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[197]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_column</span> <span class="o">=</span> <span class="n">data_score</span><span class="p">[</span><span class="s2">&quot;VESTIGINGSNUMMER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">data_score</span><span class="p">[</span><span class="s2">&quot;BRIN_NUMMER&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">data_score</span><span class="p">[</span><span class="s2">&quot;DATUM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> 
+<span class="n">data_score</span><span class="o">.</span><span class="n">insert</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SCHOOL_ID&quot;</span><span class="p">,</span> <span class="n">new_column</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[198]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(31300, 36)
+Index([&#39;SCHOOL_ID&#39;, &#39;PEILDATUM_LEERLINGEN&#39;, &#39;DATUM&#39;, &#39;BRIN_NUMMER&#39;,
+       &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;LEERJAAR_8&#39;,
+       &#39;ONTHEFFING_REDEN_ND&#39;, &#39;CET_AANTAL&#39;, &#39;CET_GEM&#39;, &#39;IEP_AANTAL&#39;, &#39;IEP_GEM&#39;,
+       &#39;ROUTE8_AANTAL&#39;, &#39;ROUTE8_GEM&#39;, &#39;DREMPEL_AANTAL&#39;, &#39;drempel_gem&#39;,
+       &#39;DIA_AANTAL&#39;, &#39;DIA_GEM&#39;, &#39;CESAN_AANTAL&#39;, &#39;CESAN_GEM&#39;, &#39;AMN_AANTAL&#39;,
+       &#39;AMN_GEM&#39;, &#39;EXAMEN_1&#39;, &#39;EXAMEN_1_AANTAL&#39;, &#39;EXAMEN_1_GEM&#39;, &#39;EXAMEN_2&#39;,
+       &#39;EXAMEN_2_AANTAL&#39;, &#39;EXAMEN_2_GEM&#39;],
+      dtype=&#39;object&#39;)
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>And last (but not least) what we should do - remove all unnecessary columns:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[199]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;PEILDATUM_LEERLINGEN&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;BRIN_NUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;VESTIGINGSNUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;LEERJAAR_8&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ONTHEFFING_REDEN_ND&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;CET_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;CET_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;IEP_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;IEP_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ROUTE8_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ROUTE8_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;DREMPEL_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;drempel_gem&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;DIA_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;DIA_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;CESAN_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;CESAN_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;AMN_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;AMN_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;EXAMEN_2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;EXAMEN_2_AANTAL&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;EXAMEN_2_GEM&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;EXAMEN_1&#39;</span><span class="p">:</span> <span class="s1">&#39;EXAMEN&#39;</span><span class="p">,</span> <span class="s1">&#39;EXAMEN_1_AANTAL&#39;</span><span class="p">:</span> <span class="s1">&#39;EXAMEN_AANTAL&#39;</span><span class="p">,</span> <span class="s1">&#39;EXAMEN_1_GEM&#39;</span><span class="p">:</span><span class="s1">&#39;EXAMEN_GEM&#39;</span><span class="p">,</span> <span class="s1">&#39;Leerjaar_8&#39;</span><span class="p">:</span><span class="s1">&#39;LEERJAAR_8&#39;</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[202]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(31300, 14)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[202]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SCHOOL_ID</th>
+      <th>DATUM</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>SOORT_PO</th>
+      <th>DENOMINATIE_VESTIGING</th>
+      <th>BEVOEGD_GEZAG_NUMMER</th>
+      <th>EXAMEN</th>
+      <th>EXAMEN_AANTAL</th>
+      <th>EXAMEN_GEM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>000AP_2015</td>
+      <td>2015</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>41646</td>
+      <td>CET</td>
+      <td>11</td>
+      <td>534.3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>000AR_2015</td>
+      <td>2015</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>Bo</td>
+      <td>Rooms-Katholiek</td>
+      <td>41797</td>
+      <td>CET</td>
+      <td>18</td>
+      <td>539.8</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>000AZ_2015</td>
+      <td>2015</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>41638</td>
+      <td>CET</td>
+      <td>22</td>
+      <td>532.9</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>000BA_2015</td>
+      <td>2015</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>41530</td>
+      <td>CET</td>
+      <td>11</td>
+      <td>536.2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>000BB_2015</td>
+      <td>2015</td>
+      <td>Obs Letterwies</td>
+      <td>9944AR</td>
+      <td>NIEUWOLDA</td>
+      <td>1895</td>
+      <td>Oldambt</td>
+      <td>Groningen</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>41613</td>
+      <td>CET</td>
+      <td>16</td>
+      <td>531.3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>First part of our dataset constraction has done, so le't write results down to temporary .csv file:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[204]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;score_first_result.csv&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 </body>
 

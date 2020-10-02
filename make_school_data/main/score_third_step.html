@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>index</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>score_third_step</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14259,23 +14259,1248 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Dataset-construction">Dataset construction<a class="anchor-link" href="#Dataset-construction">&#182;</a></h3><ol>
-<li><a href="./make_school_data/main/score_first_step.html">First step</a></li>
-<li><a href="./make_school_data/main/score_second_step.html">Second step</a></li>
-<li><a href="./make_school_data/main/score_third_step.html">Third step</a></li>
-</ol>
-<p><a href="./make_school_data/main/column_description.html">Column description</a></p>
-<h3 id="Classifications">Classifications<a class="anchor-link" href="#Classifications">&#182;</a></h3><ol>
-<li><a href="./schools_analytics/Denomination_classificator.html">Denomination classificator</a></li>
-<li><a href="./schools_analytics/CET_score_classificator.html">CET score level classificator</a></li>
-</ol>
+<h1 id="#-Dutch-schools-dataset-construction"># Dutch schools dataset construction<a class="anchor-link" href="##-Dutch-schools-dataset-construction">&#182;</a></h1><p>This article is the third part of dataset construction. Here I want to add new data into dataset I got on previous steps. This time it will be info students who wasn't able to make it on time and stayed in primary school longer then others</p>
+<p>All the data for this part of dataset construction I got here: <a href="https://duo.nl/open_onderwijsdata/databestanden/po/leerlingen-po/bo-sbo/zittenblijven.jsp">https://duo.nl/open_onderwijsdata/databestanden/po/leerlingen-po/bo-sbo/zittenblijven.jsp</a></p>
+<h2 id="3.-Students-who-stayed-in-primary-school-longer.">3. Students who stayed in primary school longer.<a class="anchor-link" href="#3.-Students-who-stayed-in-primary-school-longer.">&#182;</a></h2><p>Read .csv file of new data:</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="n">data_raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_data/Students_stayed_longer_2013_2019.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data_raw</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_raw</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">data_raw</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(6910, 39)
+Index([&#39;BRIN_NUMMER&#39;, &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;,
+       &#39;POSTCODE_VESTIGING&#39;, &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;,
+       &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;, &#39;DENOMINATIE_VESTIGING&#39;,
+       &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;LJ8_13&#39;, &#39;ZIT_13&#39;, &#39;ZITPERC_13&#39;,
+       &#39;ZITPERC_LJ_13&#39;, &#39;LJ8_14&#39;, &#39;ZIT_14&#39;, &#39;ZITPERC_14&#39;, &#39;ZITPERC_LJ_14&#39;,
+       &#39;LJ8_15&#39;, &#39;ZIT_15&#39;, &#39;ZITPERC_15&#39;, &#39;ZITPERC_LJ_15&#39;, &#39;LJ8_16&#39;, &#39;ZIT_16&#39;,
+       &#39;ZITPERC_16&#39;, &#39;ZITPERC_LJ_16&#39;, &#39;LJ8_17&#39;, &#39;ZIT_17&#39;, &#39;ZITPERC_17&#39;,
+       &#39;ZITPERC_LJ_17&#39;, &#39;LJ8_18&#39;, &#39;ZIT_18&#39;, &#39;ZITPERC_18&#39;, &#39;ZITPERC_LJ_18&#39;,
+       &#39;LJ8_19&#39;, &#39;ZIT_19&#39;, &#39;ZITPERC_19&#39;, &#39;ZITPERC_LJ_19&#39;],
+      dtype=&#39;object&#39;)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>BRIN_NUMMER</th>
+      <th>VESTIGINGSNUMMER</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>SOORT_PO</th>
+      <th>DENOMINATIE_VESTIGING</th>
+      <th>...</th>
+      <th>ZITPERC_17</th>
+      <th>ZITPERC_LJ_17</th>
+      <th>LJ8_18</th>
+      <th>ZIT_18</th>
+      <th>ZITPERC_18</th>
+      <th>ZITPERC_LJ_18</th>
+      <th>LJ8_19</th>
+      <th>ZIT_19</th>
+      <th>ZITPERC_19</th>
+      <th>ZITPERC_LJ_19</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>00AP</td>
+      <td>0</td>
+      <td>Wereldwijs</td>
+      <td>2716PH</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>...</td>
+      <td>,181818181818182</td>
+      <td>,0227272727272727</td>
+      <td>11</td>
+      <td>1</td>
+      <td>,0909090909090909</td>
+      <td>,0113636363636364</td>
+      <td>8</td>
+      <td>2</td>
+      <td>,25</td>
+      <td>,03125</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>00AR</td>
+      <td>0</td>
+      <td>BS "De Maasparel"</td>
+      <td>6107AW</td>
+      <td>STEVENSWEERT</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>Bo</td>
+      <td>Rooms-Katholiek</td>
+      <td>...</td>
+      <td>,0588235294117647</td>
+      <td>,00735294117647059</td>
+      <td>17</td>
+      <td>1</td>
+      <td>,0588235294117647</td>
+      <td>,00735294117647059</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>00AV</td>
+      <td>0</td>
+      <td>De Morgenster</td>
+      <td>3201CN</td>
+      <td>SPIJKENISSE</td>
+      <td>1930</td>
+      <td>Nissewaard</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+      <td>1</td>
+      <td>,0833333333333333</td>
+      <td>,0104166666666667</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>00AZ</td>
+      <td>0</td>
+      <td>De Stapsteen</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1978</td>
+      <td>Molenlanden</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>,25</td>
+      <td>,03125</td>
+      <td>14</td>
+      <td>2</td>
+      <td>,142857142857143</td>
+      <td>,0178571428571429</td>
+      <td>11</td>
+      <td>1</td>
+      <td>,0909090909090909</td>
+      <td>,0113636363636364</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>00BA</td>
+      <td>0</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>15</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 39 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>In this dataset I see that there are a lot of columns like 'ZIT_YEAR', 'ZITPERC_YEAR', 'ZITPERC_LJ_YEAR', 'LJ8_YEAR', so I would like to get this 'YEAR' part and transform this columns to rows with specific year value and only 3 columns: 'ZIT', 'ZITPERC',  'ZITPERC_LJ' and 'LJ8'. It will need a lot of transformations, so let's start with creating few separate dataset for each year:</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">convert_to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.&#39;</span><span class="p">,</span><span class="s1">&#39;0.&#39;</span><span class="p">)</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+    
+<span class="k">def</span> <span class="nf">get_year_dataset</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data_raw</span><span class="o">.</span><span class="n">copy</span><span class="p">())[[</span><span class="s1">&#39;BRIN_NUMMER&#39;</span><span class="p">,</span> <span class="s1">&#39;VESTIGINGSNUMMER&#39;</span><span class="p">,</span> 
+                              <span class="s1">&#39;LJ8_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">,</span> <span class="s1">&#39;ZIT_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">,</span>
+                              <span class="s1">&#39;ZITPERC_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">]]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VESTIGINGSNUMMER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;BRIN_NUMMER&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_20&quot;</span> <span class="o">+</span> <span class="n">year</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;LJ8_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">:</span> <span class="s1">&#39;LJ8&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;ZIT_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">:</span> <span class="s1">&#39;ZIT&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;ZITPERC_&#39;</span> <span class="o">+</span> <span class="n">year</span><span class="p">:</span> <span class="s1">&#39;ZITPERC&#39;</span><span class="p">},</span>
+                <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;VESTIGINGSNUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;BRIN_NUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">convert_to_numeric</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;ZITPERC&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ZITPERC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ZITPERC&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="n">data_2014</span> <span class="o">=</span> <span class="n">get_year_dataset</span><span class="p">(</span><span class="s1">&#39;14&#39;</span><span class="p">)</span>
+<span class="n">data_2015</span> <span class="o">=</span> <span class="n">get_year_dataset</span><span class="p">(</span><span class="s1">&#39;15&#39;</span><span class="p">)</span>
+<span class="n">data_2016</span> <span class="o">=</span> <span class="n">get_year_dataset</span><span class="p">(</span><span class="s1">&#39;16&#39;</span><span class="p">)</span>
+<span class="n">data_2017</span> <span class="o">=</span> <span class="n">get_year_dataset</span><span class="p">(</span><span class="s1">&#39;17&#39;</span><span class="p">)</span>
+<span class="n">data_2018</span> <span class="o">=</span> <span class="n">get_year_dataset</span><span class="p">(</span><span class="s1">&#39;18&#39;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_2014</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">data_2014</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>LJ8            int64
+ZIT            int64
+ZITPERC      float64
+SCHOOL_ID     object
+dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>And merge it together:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_2014</span><span class="p">,</span> <span class="n">data_2015</span><span class="p">,</span> <span class="n">data_2016</span><span class="p">,</span> <span class="n">data_2017</span><span class="p">,</span> <span class="n">data_2018</span><span class="p">]</span>
+<span class="n">data_second_year</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data_frames</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data_second_year</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2014</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2015</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2016</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2017</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2017</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_2018</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_second_year</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">data_second_year</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(6910, 4)
+(6910, 4)
+(6910, 4)
+(6910, 4)
+(6910, 4)
+(6910, 4)
+(34550, 4)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LJ8</th>
+      <th>ZIT</th>
+      <th>ZITPERC</th>
+      <th>SCHOOL_ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>11</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>000AP_2014</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18</td>
+      <td>1</td>
+      <td>5.555556</td>
+      <td>000AR_2014</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+      <td>33.333333</td>
+      <td>000AV_2014</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>24</td>
+      <td>3</td>
+      <td>12.500000</td>
+      <td>000AZ_2014</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>12</td>
+      <td>4</td>
+      <td>33.333333</td>
+      <td>000BA_2014</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>34545</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>031ML_2018</td>
+    </tr>
+    <tr>
+      <th>34546</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>031MM_2018</td>
+    </tr>
+    <tr>
+      <th>34547</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>031MN_2018</td>
+    </tr>
+    <tr>
+      <th>34548</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>031MV_2018</td>
+    </tr>
+    <tr>
+      <th>34549</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>031MX_2018</td>
+    </tr>
+  </tbody>
+</table>
+<p>34550 rows × 4 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Let's check missing and unexpected values:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[25]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_second_year</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>LJ8            int64
+ZIT            int64
+ZITPERC      float64
+SCHOOL_ID     object
+dtype: object
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lj8_zero</span> <span class="o">=</span> <span class="n">data_second_year</span><span class="p">[</span><span class="n">data_second_year</span><span class="p">[</span><span class="s1">&#39;LJ8&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lj8_zero</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">lj8_zero</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(2282, 4)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LJ8</th>
+      <th>ZIT</th>
+      <th>ZITPERC</th>
+      <th>SCHOOL_ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>61</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>003AX_2014</td>
+    </tr>
+    <tr>
+      <th>69</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>003BW_2014</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>003CS_2014</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>003HM_2014</td>
+    </tr>
+    <tr>
+      <th>172</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>003LC_2014</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>It looks like we have 2282 values with total amount of students in class 8 is 0. It could be wrong data or mistake, but anyway this rows says us nothing, so we can remove it:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_second_year</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">lj8_zero</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_second_year</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">data_second_year</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(32268, 4)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LJ8</th>
+      <th>ZIT</th>
+      <th>ZITPERC</th>
+      <th>SCHOOL_ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>11</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>000AP_2014</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18</td>
+      <td>1</td>
+      <td>5.555556</td>
+      <td>000AR_2014</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+      <td>33.333333</td>
+      <td>000AV_2014</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>24</td>
+      <td>3</td>
+      <td>12.500000</td>
+      <td>000AZ_2014</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>12</td>
+      <td>4</td>
+      <td>33.333333</td>
+      <td>000BA_2014</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>So now let's read dataset from previous step, add our dataset there and write it to down to final file:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[28]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;score_second_result.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">data_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(31300, 33)
+Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;EXAMEN&#39;,
+       &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;, &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;,
+       &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;, &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;,
+       &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;, &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;,
+       &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;, &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;],
+      dtype=&#39;object&#39;)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SCHOOL_ID</th>
+      <th>DATUM</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>SOORT_PO</th>
+      <th>DENOMINATIE_VESTIGING</th>
+      <th>...</th>
+      <th>TV_2F</th>
+      <th>VSO</th>
+      <th>PRO</th>
+      <th>VMBO</th>
+      <th>VMBO_HAVO</th>
+      <th>HAVO</th>
+      <th>HAVO_VWO</th>
+      <th>VWO</th>
+      <th>ADVIES_NIET_MOGELIJK</th>
+      <th>TOTAAL_ADVIES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>000AP_2015</td>
+      <td>2015</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>000AR_2015</td>
+      <td>2015</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>Bo</td>
+      <td>Rooms-Katholiek</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>000AZ_2015</td>
+      <td>2015</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>000BA_2015</td>
+      <td>2015</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>000BB_2015</td>
+      <td>2015</td>
+      <td>Obs Letterwies</td>
+      <td>9944AR</td>
+      <td>NIEUWOLDA</td>
+      <td>1895</td>
+      <td>Oldambt</td>
+      <td>Groningen</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 33 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="n">data_second_year</span><span class="p">,</span>  <span class="n">on</span><span class="o">=</span><span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">,</span>  <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">LJ8</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">LJ8</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">ZIT</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">ZIT</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>(31300, 36)
+Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;EXAMEN&#39;,
+       &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;, &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;,
+       &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;, &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;,
+       &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;, &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;,
+       &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;, &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;,
+       &#39;LJ8&#39;, &#39;ZIT&#39;, &#39;ZITPERC&#39;],
+      dtype=&#39;object&#39;)
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[29]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SCHOOL_ID</th>
+      <th>DATUM</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>SOORT_PO</th>
+      <th>DENOMINATIE_VESTIGING</th>
+      <th>...</th>
+      <th>VMBO</th>
+      <th>VMBO_HAVO</th>
+      <th>HAVO</th>
+      <th>HAVO_VWO</th>
+      <th>VWO</th>
+      <th>ADVIES_NIET_MOGELIJK</th>
+      <th>TOTAAL_ADVIES</th>
+      <th>LJ8</th>
+      <th>ZIT</th>
+      <th>ZITPERC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>000AP_2015</td>
+      <td>2015</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>11</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>000AR_2015</td>
+      <td>2015</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>Bo</td>
+      <td>Rooms-Katholiek</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>18</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>000AZ_2015</td>
+      <td>2015</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>22</td>
+      <td>19</td>
+      <td>3</td>
+      <td>15.789474</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>000BA_2015</td>
+      <td>2015</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+      <td>24</td>
+      <td>5</td>
+      <td>20.833333</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>000BB_2015</td>
+      <td>2015</td>
+      <td>Obs Letterwies</td>
+      <td>9944AR</td>
+      <td>NIEUWOLDA</td>
+      <td>1895</td>
+      <td>Oldambt</td>
+      <td>Groningen</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>7</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>16</td>
+      <td>15</td>
+      <td>2</td>
+      <td>13.333333</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 36 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[30]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;output/Score.csv&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 </body>
 

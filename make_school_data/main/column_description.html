@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>index</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>column_description</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14259,23 +14259,430 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Dataset-construction">Dataset construction<a class="anchor-link" href="#Dataset-construction">&#182;</a></h3><ol>
-<li><a href="./make_school_data/main/score_first_step.html">First step</a></li>
-<li><a href="./make_school_data/main/score_second_step.html">Second step</a></li>
-<li><a href="./make_school_data/main/score_third_step.html">Third step</a></li>
-</ol>
-<p><a href="./make_school_data/main/column_description.html">Column description</a></p>
-<h3 id="Classifications">Classifications<a class="anchor-link" href="#Classifications">&#182;</a></h3><ol>
-<li><a href="./schools_analytics/Denomination_classificator.html">Denomination classificator</a></li>
-<li><a href="./schools_analytics/CET_score_classificator.html">CET score level classificator</a></li>
-</ol>
+<h1 id="Description-for-Dutch-schools-dataset:">Description for Dutch schools dataset:<a class="anchor-link" href="#Description-for-Dutch-schools-dataset:">&#182;</a></h1><p>There are a lot of columns in resulting dataset and almost all of them are in dutch :) so I think it would be clears to explain what info each column shows us. First let's read the dataset and take a loor at it and at its columns:</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="n">data_score</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;output/Score.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
+<span class="n">data_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SCHOOL_ID</th>
+      <th>DATUM</th>
+      <th>INSTELLINGSNAAM_VESTIGING</th>
+      <th>POSTCODE_VESTIGING</th>
+      <th>PLAATSNAAM</th>
+      <th>GEMEENTENUMMER</th>
+      <th>GEMEENTENAAM</th>
+      <th>PROVINCIE</th>
+      <th>SOORT_PO</th>
+      <th>DENOMINATIE_VESTIGING</th>
+      <th>...</th>
+      <th>VMBO</th>
+      <th>VMBO_HAVO</th>
+      <th>HAVO</th>
+      <th>HAVO_VWO</th>
+      <th>VWO</th>
+      <th>ADVIES_NIET_MOGELIJK</th>
+      <th>TOTAAL_ADVIES</th>
+      <th>LJ8</th>
+      <th>ZIT</th>
+      <th>ZITPERC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>000AP_2015</td>
+      <td>2015</td>
+      <td>De Schanskorf</td>
+      <td>2715BT</td>
+      <td>ZOETERMEER</td>
+      <td>637</td>
+      <td>Zoetermeer</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Gereformeerd vrijgemaakt</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>11</td>
+      <td>13</td>
+      <td>0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>000AR_2015</td>
+      <td>2015</td>
+      <td>BS "De Maasparel"</td>
+      <td>6109AM</td>
+      <td>OHE EN LAAK</td>
+      <td>1641</td>
+      <td>Maasgouw</td>
+      <td>Limburg</td>
+      <td>Bo</td>
+      <td>Rooms-Katholiek</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>18</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>000AZ_2015</td>
+      <td>2015</td>
+      <td>De Kiezel en de Kei</td>
+      <td>2971AR</td>
+      <td>BLESKENSGRAAF CA</td>
+      <td>1927</td>
+      <td>Molenwaard</td>
+      <td>Zuid-Holland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>22</td>
+      <td>19</td>
+      <td>3</td>
+      <td>15.789474</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>000BA_2015</td>
+      <td>2015</td>
+      <td>OBS De Klimboom</td>
+      <td>6666EB</td>
+      <td>HETEREN</td>
+      <td>1734</td>
+      <td>Overbetuwe</td>
+      <td>Gelderland</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+      <td>24</td>
+      <td>5</td>
+      <td>20.833333</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>000BB_2015</td>
+      <td>2015</td>
+      <td>Obs Letterwies</td>
+      <td>9944AR</td>
+      <td>NIEUWOLDA</td>
+      <td>1895</td>
+      <td>Oldambt</td>
+      <td>Groningen</td>
+      <td>Bo</td>
+      <td>Openbaar</td>
+      <td>...</td>
+      <td>7</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>16</td>
+      <td>15</td>
+      <td>2</td>
+      <td>13.333333</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 36 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;EXAMEN&#39;,
+       &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;, &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;,
+       &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;, &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;,
+       &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;, &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;,
+       &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;, &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;,
+       &#39;LJ8&#39;, &#39;ZIT&#39;, &#39;ZITPERC&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We can see 37 columns with different values, lets's explain what means what:</p>
+<table>
+<thead><tr>
+<th style="text-align:center"><strong>Columns</strong></th>
+<th style="text-align:left"><strong>Meaning</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>SCHOOL_ID</strong></td>
+<td style="text-align:left">School ID, was made out of 3 columns, contains info about school registration number and year for which data is shown</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>DATUM</strong></td>
+<td style="text-align:left">Year for which data is shown</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>INSTELLINGSNAAM_VESTIGING</strong></td>
+<td style="text-align:left">Name of the school</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>POSTCODE_VESTIGING</strong></td>
+<td style="text-align:left">School postcode</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>PLAATSNAAM</strong></td>
+<td style="text-align:left">Place where the school is located (usually town or village)</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>GEMEENTENUMMER</strong></td>
+<td style="text-align:left">Number of the municipality where the school is located</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>GEMEENTENAAM</strong></td>
+<td style="text-align:left">Name of the municipality where the school is located</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>PROVINCIE</strong></td>
+<td style="text-align:left">Province where the school is located</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>SOORT_PO</strong></td>
+<td style="text-align:left">The type of primary education: bo (primary education) or sbo (special primary education)</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>DENOMINATIE_VESTIGING</strong></td>
+<td style="text-align:left">The philosophy or religion propagated by the school establishment</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>BEVOEGD_GEZAG_NUMMER</strong></td>
+<td style="text-align:left">Number of the school board under which the school is located</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>EXAMEN</strong></td>
+<td style="text-align:left">Type of final exam which shool was chosen for most of the students</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>EXAMEN_AANTAL</strong></td>
+<td style="text-align:left">Amount of student who took the exam <strong><em>EXAMEN</em></strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>EXAMEN_GEM</strong></td>
+<td style="text-align:left">Average score for the exam <strong><em>EXAMEN</em></strong> which got <strong><em>EXAMEN_AANTAL</em></strong> amount of students in the school in <strong><em>DATUM</em></strong> year</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>REKENEN_LAGER1F</strong></td>
+<td style="text-align:left">The number of students with has a level for arithmetic lower than the basic level 1F</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>REKENEN_1F</strong></td>
+<td style="text-align:left">The number of students with the basic 1F math level for arithmetic</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>REKENEN_1S</strong></td>
+<td style="text-align:left">The number of students with the target level for arithmetic</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>REKENEN_2F</strong></td>
+<td style="text-align:left">The number of students with the 2F basic math level</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>LV_LAGER1F</strong></td>
+<td style="text-align:left">The number of students with a level below basic level 1F for reading skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>LV_1F</strong></td>
+<td style="text-align:left">The number of students with the basic level 1F for reading skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>LV_2F</strong></td>
+<td style="text-align:left">The number of students with the basic level 2F for reading skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>TV_LAGER1F</strong></td>
+<td style="text-align:left">The number of students with a level below the basic language proficiency level</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>TV_1F</strong></td>
+<td style="text-align:left">The number of students with the basic level 1F for language proficiency skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>TV_2F</strong></td>
+<td style="text-align:left">The number of students with the basic level 2F for language proficiency skills</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>PRO</strong></td>
+<td style="text-align:left">The number of students who got school advice for practical education </td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>VSO</strong></td>
+<td style="text-align:left">The number of students who got school advice for secondary special education</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>VMBO</strong></td>
+<td style="text-align:left">The number of students who got school advice for practical and some more theoretical education</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>VMBO_HAVO</strong></td>
+<td style="text-align:left">The number of students who got school advice for mixed or theoretical learning path and <strong>HAVO</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>HAVO</strong></td>
+<td style="text-align:left">The number of students who got school advice for high education (after secondary one)</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>HAVO_VWO</strong></td>
+<td style="text-align:left">The number of students who got school advice for high education or pre-university education</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>VWO</strong></td>
+<td style="text-align:left">The number of students who got school advice for pre-university education</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ADVIES_NIET_MOGELIJK</strong></td>
+<td style="text-align:left">The number of students for whom the school has indicated that a specific advice is not possible (for example due to transition classes)</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>TOTAAL_ADVIES</strong></td>
+<td style="text-align:left">The total number of students with a school advice + the number of students for which the school has indicated that a specific advice is not possible</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>LJ8</strong></td>
+<td style="text-align:left">Number of students in grade 8</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ZIT</strong></td>
+<td style="text-align:left">Number of students aged 12 or older, in grade 8, with more than 8 years of residence in education</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ZITPERC</strong></td>
+<td style="text-align:left">% in general (students aged 12 or older, in grade 8, with more than 8 years of stay in education / total pupils in grade 8)</td>
+</tr>
+</tbody>
+</table>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 </body>
 
