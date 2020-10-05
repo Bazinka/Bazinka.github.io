@@ -14267,7 +14267,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[101]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
@@ -14313,7 +14313,7 @@ Index([&#39;BRIN_NUMMER&#39;, &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_V
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[101]:</div>
 
 
 
@@ -14495,13 +14495,13 @@ Index([&#39;BRIN_NUMMER&#39;, &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_V
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In this dataset I see that there are a lot of columns like 'ZIT_YEAR', 'ZITPERC_YEAR', 'ZITPERC_LJ_YEAR', 'LJ8_YEAR', so I would like to get this 'YEAR' part and transform this columns to rows with specific year value and only 3 columns: 'ZIT', 'ZITPERC',  'ZITPERC_LJ' and 'LJ8'. It will need a lot of transformations, so let's start with creating few separate dataset for each year:</p>
+<p>In this dataset I see that there are a lot of columns like <strong>ZIT_YEAR</strong>, <strong>ZITPERC_YEAR</strong>, <strong>ZITPERC_LJ_YEAR</strong>, <strong>LJ8_YEAR</strong>, so I would like to get this <strong>YEAR</strong> part and transform this columns to rows with specific year value and only 3 columns: <strong>ZIT</strong>, <strong>ZITPERC</strong>,  <strong>ZITPERC_LJ</strong> and <strong>LJ8</strong>. It will need a lot of transformations, so let's start with creating few separate dataset for each year:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[102]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">convert_to_numeric</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
@@ -14540,7 +14540,7 @@ Index([&#39;BRIN_NUMMER&#39;, &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_V
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[103]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_2014</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -14560,7 +14560,7 @@ Index([&#39;BRIN_NUMMER&#39;, &#39;VESTIGINGSNUMMER&#39;, &#39;INSTELLINGSNAAM_V
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[103]:</div>
 
 
 
@@ -14588,7 +14588,7 @@ dtype: object</pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[104]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_2014</span><span class="p">,</span> <span class="n">data_2015</span><span class="p">,</span> <span class="n">data_2016</span><span class="p">,</span> <span class="n">data_2017</span><span class="p">,</span> <span class="n">data_2018</span><span class="p">]</span>
@@ -14635,7 +14635,7 @@ dtype: object</pre>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[104]:</div>
 
 
 
@@ -14763,7 +14763,7 @@ dtype: object</pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[25]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[105]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_second_year</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
@@ -14802,7 +14802,7 @@ dtype: object
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[106]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">lj8_zero</span> <span class="o">=</span> <span class="n">data_second_year</span><span class="p">[</span><span class="n">data_second_year</span><span class="p">[</span><span class="s1">&#39;LJ8&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
@@ -14835,7 +14835,7 @@ dtype: object
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[106]:</div>
 
 
 
@@ -14920,7 +14920,7 @@ dtype: object
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[107]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_second_year</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">lj8_zero</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -14953,7 +14953,7 @@ dtype: object
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[107]:</div>
 
 
 
@@ -15038,7 +15038,7 @@ dtype: object
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[108]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;score_second_result.csv&quot;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span> 
@@ -15081,7 +15081,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[108]:</div>
 
 
 
@@ -15263,7 +15263,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[109]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">data_score</span><span class="p">,</span> <span class="n">data_second_year</span><span class="p">,</span>  <span class="n">on</span><span class="o">=</span><span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">,</span>  <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -15308,7 +15308,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[29]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[109]:</div>
 
 
 
@@ -15487,10 +15487,63 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Looking at the list of columns I can see that we probably won't need <strong>BEVOEGD_GEZAG_NUMMER</strong> and <strong>ZITPERC</strong> columns because we can get the info in this columns from other places in dataset. I also think that we should remove <strong>GEMEENTENUMMER</strong> columns because we've already have <strong>GEMEENTENAAM</strong> which has the same info. Let's remove them and then write the result dataset to the output folder:</p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[110]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;GEMEENTENUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;BEVOEGD_GEZAG_NUMMER&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;ZITPERC&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[110]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;EXAMEN&#39;, &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;,
+       &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;, &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;,
+       &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;, &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;,
+       &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;, &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;,
+       &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;, &#39;LJ8&#39;, &#39;ZIT&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[111]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;output/Score.csv&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>

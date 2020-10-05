@@ -14265,7 +14265,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
@@ -14286,7 +14286,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -14314,12 +14314,13 @@ a.anchor-link {
       <th>INSTELLINGSNAAM_VESTIGING</th>
       <th>POSTCODE_VESTIGING</th>
       <th>PLAATSNAAM</th>
-      <th>GEMEENTENUMMER</th>
       <th>GEMEENTENAAM</th>
       <th>PROVINCIE</th>
       <th>SOORT_PO</th>
       <th>DENOMINATIE_VESTIGING</th>
+      <th>EXAMEN</th>
       <th>...</th>
+      <th>PRO</th>
       <th>VMBO</th>
       <th>VMBO_HAVO</th>
       <th>HAVO</th>
@@ -14329,7 +14330,6 @@ a.anchor-link {
       <th>TOTAAL_ADVIES</th>
       <th>LJ8</th>
       <th>ZIT</th>
-      <th>ZITPERC</th>
     </tr>
   </thead>
   <tbody>
@@ -14340,12 +14340,13 @@ a.anchor-link {
       <td>De Schanskorf</td>
       <td>2715BT</td>
       <td>ZOETERMEER</td>
-      <td>637</td>
       <td>Zoetermeer</td>
       <td>Zuid-Holland</td>
       <td>Bo</td>
       <td>Gereformeerd vrijgemaakt</td>
+      <td>CET</td>
       <td>...</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>5</td>
@@ -14355,7 +14356,6 @@ a.anchor-link {
       <td>11</td>
       <td>13</td>
       <td>0</td>
-      <td>0.000000</td>
     </tr>
     <tr>
       <th>1</th>
@@ -14364,12 +14364,13 @@ a.anchor-link {
       <td>BS "De Maasparel"</td>
       <td>6109AM</td>
       <td>OHE EN LAAK</td>
-      <td>1641</td>
       <td>Maasgouw</td>
       <td>Limburg</td>
       <td>Bo</td>
       <td>Rooms-Katholiek</td>
+      <td>CET</td>
       <td>...</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>7</td>
@@ -14379,7 +14380,6 @@ a.anchor-link {
       <td>18</td>
       <td>17</td>
       <td>0</td>
-      <td>0.000000</td>
     </tr>
     <tr>
       <th>2</th>
@@ -14388,12 +14388,13 @@ a.anchor-link {
       <td>De Kiezel en de Kei</td>
       <td>2971AR</td>
       <td>BLESKENSGRAAF CA</td>
-      <td>1927</td>
       <td>Molenwaard</td>
       <td>Zuid-Holland</td>
       <td>Bo</td>
       <td>Openbaar</td>
+      <td>CET</td>
       <td>...</td>
+      <td>1</td>
       <td>3</td>
       <td>5</td>
       <td>3</td>
@@ -14403,7 +14404,6 @@ a.anchor-link {
       <td>22</td>
       <td>19</td>
       <td>3</td>
-      <td>15.789474</td>
     </tr>
     <tr>
       <th>3</th>
@@ -14412,12 +14412,13 @@ a.anchor-link {
       <td>OBS De Klimboom</td>
       <td>6666EB</td>
       <td>HETEREN</td>
-      <td>1734</td>
       <td>Overbetuwe</td>
       <td>Gelderland</td>
       <td>Bo</td>
       <td>Openbaar</td>
+      <td>CET</td>
       <td>...</td>
+      <td>1</td>
       <td>1</td>
       <td>0</td>
       <td>1</td>
@@ -14427,7 +14428,6 @@ a.anchor-link {
       <td>12</td>
       <td>24</td>
       <td>5</td>
-      <td>20.833333</td>
     </tr>
     <tr>
       <th>4</th>
@@ -14436,12 +14436,13 @@ a.anchor-link {
       <td>Obs Letterwies</td>
       <td>9944AR</td>
       <td>NIEUWOLDA</td>
-      <td>1895</td>
       <td>Oldambt</td>
       <td>Groningen</td>
       <td>Bo</td>
       <td>Openbaar</td>
+      <td>CET</td>
       <td>...</td>
+      <td>0</td>
       <td>7</td>
       <td>0</td>
       <td>5</td>
@@ -14451,11 +14452,10 @@ a.anchor-link {
       <td>16</td>
       <td>15</td>
       <td>2</td>
-      <td>13.333333</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 36 columns</p>
+<p>5 rows × 33 columns</p>
 </div>
 </div>
 
@@ -14468,7 +14468,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="o">.</span><span class="n">columns</span>
@@ -14487,20 +14487,19 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
 <pre>Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;, &#39;POSTCODE_VESTIGING&#39;,
-       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENUMMER&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
-       &#39;DENOMINATIE_VESTIGING&#39;, &#39;BEVOEGD_GEZAG_NUMMER&#39;, &#39;EXAMEN&#39;,
-       &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;, &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;,
-       &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;, &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;,
-       &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;, &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;,
-       &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;, &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;,
-       &#39;LJ8&#39;, &#39;ZIT&#39;, &#39;ZITPERC&#39;],
+       &#39;PLAATSNAAM&#39;, &#39;GEMEENTENAAM&#39;, &#39;PROVINCIE&#39;, &#39;SOORT_PO&#39;,
+       &#39;DENOMINATIE_VESTIGING&#39;, &#39;EXAMEN&#39;, &#39;EXAMEN_AANTAL&#39;, &#39;EXAMEN_GEM&#39;,
+       &#39;REKENEN_LAGER1F&#39;, &#39;REKENEN_1F&#39;, &#39;REKENEN_1S&#39;, &#39;REKENEN_2F&#39;,
+       &#39;LV_LAGER1F&#39;, &#39;LV_1F&#39;, &#39;LV_2F&#39;, &#39;TV_LAGER1F&#39;, &#39;TV_1F&#39;, &#39;TV_2F&#39;, &#39;VSO&#39;,
+       &#39;PRO&#39;, &#39;VMBO&#39;, &#39;VMBO_HAVO&#39;, &#39;HAVO&#39;, &#39;HAVO_VWO&#39;, &#39;VWO&#39;,
+       &#39;ADVIES_NIET_MOGELIJK&#39;, &#39;TOTAAL_ADVIES&#39;, &#39;LJ8&#39;, &#39;ZIT&#39;],
       dtype=&#39;object&#39;)</pre>
 </div>
 
@@ -14542,10 +14541,6 @@ a.anchor-link {
 <td style="text-align:left">Place where the school is located (usually town or village)</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>GEMEENTENUMMER</strong></td>
-<td style="text-align:left">Number of the municipality where the school is located</td>
-</tr>
-<tr>
 <td style="text-align:center"><strong>GEMEENTENAAM</strong></td>
 <td style="text-align:left">Name of the municipality where the school is located</td>
 </tr>
@@ -14560,10 +14555,6 @@ a.anchor-link {
 <tr>
 <td style="text-align:center"><strong>DENOMINATIE_VESTIGING</strong></td>
 <td style="text-align:left">The philosophy or religion propagated by the school establishment</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>BEVOEGD_GEZAG_NUMMER</strong></td>
-<td style="text-align:left">Number of the school board under which the school is located</td>
 </tr>
 <tr>
 <td style="text-align:center"><strong>EXAMEN</strong></td>
@@ -14661,28 +14652,10 @@ a.anchor-link {
 <td style="text-align:center"><strong>ZIT</strong></td>
 <td style="text-align:left">Number of students aged 12 or older, in grade 8, with more than 8 years of residence in education</td>
 </tr>
-<tr>
-<td style="text-align:center"><strong>ZITPERC</strong></td>
-<td style="text-align:left">% in general (students aged 12 or older, in grade 8, with more than 8 years of stay in education / total pupils in grade 8)</td>
-</tr>
 </tbody>
 </table>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div>
 </body>
 
