@@ -14259,15 +14259,21 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Dutch-primary-school-denomination-classificator">Dutch primary school denomination classificator<a class="anchor-link" href="#Dutch-primary-school-denomination-classificator">&#182;</a></h1><h2 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h2><p>I need to choose school for by child and I have a problem there -  I don't know what should I look at in this process. For example, there are a lot of types of school, like 'Openbaar', 'Rooms-Katholiek', 'Protestants-Christelijk', etc. And for the person who never met this system before, it's not very clear which one should I choose and which one would fit my child. On the other hand, I want to make a desicion based on objective data like scores in final tests or how many pupils from the school were recommended to continue different 'level' of education in future, or for example 'quality' of students knowledge etc.</p>
+<h1 id="Dutch-primary-school-denomination-classificator">Dutch primary school denomination classificator<a class="anchor-link" href="#Dutch-primary-school-denomination-classificator">&#182;</a></h1><h2 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h2><p>I need to choose a school for child and I have a problem there -  I don't know what should I look at in this process. For example there are a lot of school types: 'Openbaar', 'Rooms-Katholiek', 'Protestants-Christelijk', etc. As for a person who never met this system before it's not very clear for me which one should I choose and which one would fit my child better. On the other hand I want to make a desicion based on objective data such as</p>
+<ul>
+<li>Scores in final tests.</li>
+<li>A number of students from the school who got recommended to continue their education on a particular 'level' in future.</li>
+<li>A 'quality' of students knowledge.</li>
+<li>Etc. </li>
+</ul>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>So as a result of all this thoughts I realized that I have a problem: I don't understand, do I need to choose a type of school together with other characteristics, or it can be explained by this characteristics. Then I can just choose other characteristics that I want for my childs school to have and they will just define the best type of school. In other words, is it possible to make a classifier which would identify whether school is Openbaar or Rooms-Katholiek or has other denomination, based on other characterrictics we have? 
-I found and pool in the dataset the most important information I want to know about my childs future school, so now I want to know do I need to choose a denomination of a school (and spend time to investigate what each school denomination mean in Dutch culture, their comparison and so on)? Or I can just choose other characteristic (which looks more clear to me) and they will define a denomination of a school. So I will build a few classifiers based on different ML alghorithms, will try to choose the best of them and see if the best classifier works good enough to predict a denomination of a primary school.</p>
-<h2 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h2><p>Let's start with reading dataset from the file 'Score.csv':</p>
+<p>As a result of all this thoughts I realized that I have a following issue: I don't know if I need to choose a type of a school together with other characteristics, or the type can be explained by those characteristics. If the second thought is true, then I can just choose the characteristics that I want for my childs school to have and they will simply define the best type of school. In other words, is it possible to make a classifier which would identify whether a school is Openbaar or Rooms-Katholiek or has other denomination based on other characterrictics we have?</p>
+<p>I found and pooled in a dataset with the most important information I want to know about my childs future school. Now I want to know if I need to choose a denomination of a school (and spend time to investigate what each school denomination means in Dutch culture, their comparison and so on)? Or I can just choose other characteristic (which look more clear to me) and they will define a denomination of a school. I will build several classifiers based on different ML alghorithms. Then I will try to choose the best of them and see if the best classifier works good enough to predict a denomination of a primary school. If there is no such classifier, we can conclude the denomination is a purely non-derivative feature and can be ignored while choosing a school.</p>
+<h2 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h2><p>Let's start with reading the dataset from the file called 'Score.csv':</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14502,7 +14508,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>There are a lot of variables here which define address of the school in different ways, so we need to choose one of them. I think we can leave <strong>GEMEENTENAAM</strong> column as the variable which explains location  and remove the rest of the the address columns:</p>
+<p>There are a lot of variables which define an address of a school in different ways here. We need to choose one of them. I think we can leave <strong>GEMEENTENAAM</strong> column as a variable which explains location and remove the rest of the the address columns:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14813,7 +14819,7 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>From the plot and data above I see that there are few values of <strong>DENOMINATIE_VESTIGING</strong> column with relatively small amoumt of data. Let's remove a rows with number of the denomination values smaller then 0.5% from total amount of observations.</p>
+<p>From the plot and data above I see that there are several values of <strong>DENOMINATIE_VESTIGING</strong> column with relatively small amoumt of data. Let's remove rows with a number of the denomination values smaller than 0.5% of the total observations amount.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14920,7 +14926,7 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In the dataset we got there are 3 categorical columns. Before start modelling, we need to convert all the categorical variables to numerical ones. Let's use <strong><em>LabelEncoder</em></strong> this time:</p>
+<p>In the dataset there are 3 categorical columns. Before starting the modelling we need to convert all the categorical variables to numerical ones. Let's use <strong><em>LabelEncoder</em></strong> this time:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15136,8 +15142,8 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Building-classification-models">Building classification models<a class="anchor-link" href="#Building-classification-models">&#182;</a></h2><p>Ley's try to build classification models using a few different ML alghorithms: Random Forest, SVM, KNN, XGBoosting.</p>
-<p>First of all, we need to standardize data and split it to test and train subsets:</p>
+<h2 id="Building-classification-models">Building classification models<a class="anchor-link" href="#Building-classification-models">&#182;</a></h2><p>Ley's try to build classification models using several different ML alghorithms: Random Forest, SVM, KNN, XGBoosting.</p>
+<p>First of all, we need to standardize the data and split it into test and train subsets:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -15237,7 +15243,7 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[230]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span>
@@ -15251,10 +15257,10 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[231]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">knn_score</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
@@ -15266,6 +15272,27 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>KNN&#39;s accuracy is: 34.89%
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -15274,7 +15301,7 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[232]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -15287,10 +15314,10 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[233]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_score</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_test</span> <span class="o">==</span> <span class="n">y_test</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_test</span><span class="p">)</span>
@@ -15302,10 +15329,31 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>XGBoost&#39;s prediction accuracy is: 51.86%
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[234]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -15321,12 +15369,90 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[234]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Score</th>
+    </tr>
+    <tr>
+      <th>Model</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>XGBoost</th>
+      <td>51.86%</td>
+    </tr>
+    <tr>
+      <th>Random Forest</th>
+      <td>40.47%</td>
+    </tr>
+    <tr>
+      <th>KNN</th>
+      <td>34.89%</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We can see that none of the ML algorithm was able to build apropriate model, the best one shows accuracy =  52% which is almost the same as random classifier. It means that we can say anything about denomination of the school looking at this features, so it looks like I can't just choose this school parameters and don't think about denomination, to find the best school for my toddler, I also need to choose denomination.</p>
+<p>We can see that none of the ML algorithm was able to build an apropriate model. The best one shows accuracy of a mere 52% which is far from perfect.</p>
+<p>That means classes of different denominations do not differ that much from each other based on the objective criteria we have in the dataset. In other words: denominations are more or less the same if compared with objective numbers.</p>
+<p>Therefore I can conclude that while choosing a school for my child I may ignore schools denominations and concentrate on scores, knowledge quality and other metrics which are important and familiar to me.</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 </body>
 

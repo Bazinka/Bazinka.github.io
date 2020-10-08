@@ -14259,20 +14259,23 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Dutch-primary-school-CET-score">Dutch primary school CET score<a class="anchor-link" href="#Dutch-primary-school-CET-score">&#182;</a></h1><h2 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h2><p>In The Netherlands children start going to school when they turn 4, so now I need to choose the best school for my toddler. I think it should meet a large number of charactheristic. It should also has an ability to give my child a good knowlegde, so he could get a good score in the final exam to continue education in secondary school. I found that Dutch Ministry of education, culture and science open some of their data, so I collected them into dataset from <a href="https://duo.nl/open_onderwijsdata/databestanden/">https://duo.nl/open_onderwijsdata/databestanden/</a> and now I want to analyse what I have there. Ideally I also want to find is it possible to calcuate the quality of the education which school can give to students based on this data or we need some extra data to define this?
-One of the main factor that could define the quality of education is final exams score, I will analyse it first. First of all I want to know what does CET score depend on and how it defines by other factors. To solve this problem first I read the dataset from the file Score.csv and get data from the most last year we have(2018), will clean it, will make new feature which would means the level of the average CET score for each school. As a result I will try to build classifier for those CET score levels to be able predict "how good" the exam result will be depending on other parameters we have. I also will use a few algorithms to build a clafssifier and see which geaves us better results.</p>
+<h1 id="Dutch-primary-school-CET-score">Dutch primary school CET score<a class="anchor-link" href="#Dutch-primary-school-CET-score">&#182;</a></h1><h2 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h2><p>In The Netherlands children start going to school when they turn 4. So now I need to choose the best school for my toddler. I think it should meet a large number of charactheristic. It should be able to give my child a worthy knowlegde, so that he gets a good score in the final exam to continue his education in a good secondary school.</p>
+<p>I found that Dutch Ministry of education, culture and science has opened some of their data. I collected the data from <a href="https://duo.nl/open_onderwijsdata/databestanden/">https://duo.nl/open_onderwijsdata/databestanden/</a> into a dataset and now I want to analyse what I have there. Ideally I would also want to find if it is possible to calcuate the quality of the education which school can give to students based on the data we have or if we need some extra data to define this.</p>
+<p>One of the main factors that could define a quality of education is the final exams score. I will analyse it first.</p>
+<p>First of all I want to know what does CET score depend on and how it is defined by other factors. To solve this problem I'm going to read the dataset from the file Score.csv and get data from the latest year we have(2018). I will clean it, will make a new feature which would mean the level of the average CET score for each school.</p>
+<p>As a result I will try to build a classifier for those CET score levels to be able to predict how "good" the exam result will be depending on other parameters we have. To do that I will use a number of classification algorithms and pick the best one.</p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h2><p>Let's start with reading dataset from the file 'Score.csv' and only data from one year (for example, 2018):</p>
+<h2 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h2><p>Let's start with reading the dataset from the file 'Score.csv'. We'll read data for only one year (for example, the year of 2018):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[47]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[66]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
@@ -14320,7 +14323,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[47]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[66]:</div>
 
 
 
@@ -14502,13 +14505,13 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>I want to create new variable which would means how well students of particular school take the exam. We have a few exams chosen by schools, let's take a look at it:</p>
+<p>I want to create a new variable which would mean how well students of a particular school take the exam. We have a few exams chosen by schools, let's take a look at them:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[48]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[67]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;EXAMEN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -14527,7 +14530,7 @@ Index([&#39;SCHOOL_ID&#39;, &#39;DATUM&#39;, &#39;INSTELLINGSNAAM_VESTIGING&#39;
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[48]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[67]:</div>
 
 
 
@@ -14550,13 +14553,13 @@ Name: EXAMEN, dtype: int64</pre>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>I will create new variable <strong>SCORE_TYPE</strong> with values 'low' and 'high' depends on score and on the chosen exam, because average score is different for different exams:</p>
+<p>I will create a new variable called <strong>SCORE_TYPE</strong> with values 'low' and 'high' depending on the score and on the chosen exam, because the average score is different for different exams:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[49]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[68]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_type_score</span><span class="p">(</span><span class="n">row</span><span class="p">):</span> 
@@ -14579,7 +14582,7 @@ Name: EXAMEN, dtype: int64</pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[50]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[69]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data_score</span><span class="p">[</span><span class="s1">&#39;SCORE_LEVEL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
@@ -14616,13 +14619,13 @@ Name: SCORE_LEVEL, dtype: int64
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Next I want to remove unnecessary columns because some of them is higly correlated (like few columns which describe an address of school, we can leave only one of them) and some of them we just don't need (like <strong>SCHOOL_ID</strong> or <strong>BEVOEGD_GEZAG_NUMMER</strong>) or they mean same thing as outcome (like score variable <strong>EXAMEN_GEM</strong>):</p>
+<p>Next I want to remove unnecessary columns because some of them are higly correlated (like a few columns which describe an address of a school, we can leave only one of them) and some of them – we just don't need (like <strong>SCHOOL_ID</strong> or <strong>BEVOEGD_GEZAG_NUMMER</strong>), or they mean the same thing as outcome (like the score variable <strong>EXAMEN_GEM</strong>):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[51]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[70]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;EXAMEN_GEM&#39;</span><span class="p">,</span> <span class="s1">&#39;SCHOOL_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;DATUM&#39;</span><span class="p">,</span> <span class="s1">&#39;INSTELLINGSNAAM_VESTIGING&#39;</span><span class="p">,</span> <span class="s1">&#39;POSTCODE_VESTIGING&#39;</span><span class="p">,</span> 
@@ -14666,7 +14669,7 @@ Index([&#39;SOORT_PO&#39;, &#39;DENOMINATIE_VESTIGING&#39;, &#39;EXAMEN&#39;, &#
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[51]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[70]:</div>
 
 
 
@@ -14854,7 +14857,7 @@ Index([&#39;SOORT_PO&#39;, &#39;DENOMINATIE_VESTIGING&#39;, &#39;EXAMEN&#39;, &#
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[52]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[71]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;SCORE_LEVEL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
@@ -14911,14 +14914,14 @@ AxesSubplot(0.125,0.125;0.775x0.755)
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The outcome (<strong>SCORE_LEVEL</strong> column) values have almost the same amount of values, so we don't need to do anything with this sample (like oversampling or undersampling) and just continue with analysis. 
-Let's encode categorical variables using LabelEncoder:</p>
+<p>The outcome (the <strong>SCORE_LEVEL</strong> column) has almost the same amount of values for both results <code>High</code> and <code>Low</code>, so we don't need to do anything with this sample (like oversampling or undersampling) and can just continue with the analysis.</p>
+<p>Let's encode categorical variables using LabelEncoder:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[53]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[72]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
@@ -14946,7 +14949,7 @@ Let's encode categorical variables using LabelEncoder:</p>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[53]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[72]:</div>
 
 
 
@@ -15128,13 +15131,13 @@ Let's encode categorical variables using LabelEncoder:</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Now we can start modelling, but first we need to normalize data (using MinMaxScaler) and split it on train and test data:</p>
+<p>Before we can start modelling we need to normalize the data (using MinMaxScaler) and split it into train and test datasets:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[54]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[73]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">cross_val_score</span>
@@ -15166,7 +15169,7 @@ Let's encode categorical variables using LabelEncoder:</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Building-models">Building models<a class="anchor-link" href="#Building-models">&#182;</a></h2><p>Let' start modelling. I will built classification model using a several ML algorithms: Random forest, K Nearest Neighbors, Support Vector Machine and XGBoost.</p>
+<h2 id="Building-models">Building models<a class="anchor-link" href="#Building-models">&#182;</a></h2><p>Let' start modelling. I will build a classification model using several ML algorithms: Random forest, K Nearest Neighbors, Support Vector Machine and XGBoost.</p>
 
 </div>
 </div>
@@ -15177,7 +15180,7 @@ Let's encode categorical variables using LabelEncoder:</p>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[55]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[74]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">random_forest</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
@@ -15200,7 +15203,7 @@ Let's encode categorical variables using LabelEncoder:</p>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[56]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[75]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Random Forest&quot;</span><span class="p">)</span>
@@ -15258,7 +15261,7 @@ Score is: 89.29
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[57]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[76]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">knn</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
@@ -15280,7 +15283,7 @@ Score is: 89.29
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[58]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[77]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;KNN&quot;</span><span class="p">)</span>
@@ -15338,7 +15341,7 @@ Score is: 83.99
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[59]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[78]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">svc</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
@@ -15359,7 +15362,7 @@ Score is: 83.99
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[60]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[79]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Support Vector Machine&quot;</span><span class="p">)</span>
@@ -15417,7 +15420,7 @@ Score is: 89.34
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[61]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[80]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">XGBoost</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
@@ -15438,7 +15441,7 @@ Score is: 89.34
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[62]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[81]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;XGBoost&quot;</span><span class="p">)</span>
@@ -15491,13 +15494,13 @@ Score is: 89.40
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>We made a few models, let's check which one gave more accurate results:</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>We made a few models, let's check which one gave us the most accurate results:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[63]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[82]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -15520,7 +15523,7 @@ Score is: 89.40
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[63]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[82]:</div>
 
 
 
@@ -15581,7 +15584,7 @@ Score is: 89.40
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[64]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[83]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#roc plot</span>
@@ -15627,13 +15630,13 @@ Score is: 89.40
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>We can see that XGBoost, SVC and Random forest gave us almost the same result.
-Let's check now what factors was the most important:</p>
+Let's check now what factors were the most important ones:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[65]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[84]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -15656,7 +15659,7 @@ Let's check now what factors was the most important:</p>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[65]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[84]:</div>
 
 
 
@@ -15690,11 +15693,25 @@ Let's check now what factors was the most important:</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>It looks like the most important factors are amount of students who doesn't have enough math skills and those who has good language skills.</p>
-<h3 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h3><p>As a result I can say that for prediction the level of CET exam XGBoost gives the better result. 
-Also when I will choose the school with better then average quality of education, I need to take a look at number of student, who knows math not very well (and probably the smallest amount of such students, the better average CET score school would have).</p>
+<p>It looks like the most important factors are: the amount of students who don't have enough math skills and the amount of students who have good language skills.</p>
+<h3 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h3><p>As a result I can say that XGBoost gives the best result for the CET exam level prediction.</p>
+<p>Also when I choose a school with a better then average quality of education, I need to take a look at the number of student who know math not so well (and probably the smaller the amount of such students is, the better the average CET score a school would have).</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
 </div>
 </body>
 
